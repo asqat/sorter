@@ -1,18 +1,57 @@
 package sorter
 
 type Sorter interface {
-	QuickSorter
-	BubbleSorter
-	InsertionSorter
-}
-
-type QuickSorter interface {
 	Sort(arr []int)
 }
 
-type QuickSort struct{}
+type Selection struct{}
 
-func (qs *QuickSort) Sort(arr []int) {
+func (ss *Selection) Sort(arr []int) {
+	for j := 0; j < len(arr); j++ {
+		min := j
+		for i := j + 1; i < len(arr); i++ {
+			if arr[min] > arr[i] {
+				min = i
+			}
+		}
+		arr[j], arr[min] = arr[min], arr[j]
+	}
+}
+
+type Insertion struct{}
+
+func (is *Insertion) Sort(arr []int) {
+	for i := 1; i < len(arr); i++ {
+		current := arr[i]
+		j := i - 1
+		for j >= 0 && arr[j] > current {
+			arr[j+1] = arr[j]
+			j--
+		}
+		arr[j+1] = current
+	}
+}
+
+type Bubble struct{}
+
+func (bs *Bubble) Sort(arr []int) {
+	for j := range arr {
+		isSorted := true
+		for i := 1; i < len(arr)-j; i++ {
+			if arr[i] < arr[i-1] {
+				isSorted = false
+				arr[i], arr[i-1] = arr[i-1], arr[i]
+			}
+		}
+		if isSorted {
+			return
+		}
+	}
+}
+
+type Quick struct{}
+
+func (qs *Quick) Sort(arr []int) {
 	n := len(arr)
 	if n < 2 {
 		return
@@ -35,7 +74,3 @@ func (qs *QuickSort) Sort(arr []int) {
 	qs.Sort(arr[:left])
 	qs.Sort(arr[left+1:])
 }
-
-type BubbleSorter interface{}
-
-type InsertionSorter interface{}
