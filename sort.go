@@ -74,3 +74,33 @@ func (qs *Quick) Sort(arr []int) {
 	qs.Sort(arr[:left])
 	qs.Sort(arr[left+1:])
 }
+
+type Counting struct {
+}
+
+func (cs *Counting) Sort(arr []int) {
+	min := arr[0]
+	max := arr[0]
+
+	for i := 0; i < len(arr); i++ {
+		if arr[i] > max {
+			max = arr[i]
+		}
+		if arr[i] < min {
+			min = arr[i]
+		}
+	}
+	bucket := make([]int, max-min+1)
+
+	for i := 0; i < len(arr); i++ {
+		bucket[arr[i]-min]++
+	}
+	arr = arr[:0]
+
+	for i := 0; i < len(bucket); i++ {
+		cnt := bucket[i]
+		for j := 0; j < cnt; j++ {
+			arr = append(arr, i+min)
+		}
+	}
+}

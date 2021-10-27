@@ -188,6 +188,51 @@ func TestQuick_Sort(t *testing.T) {
 	}
 }
 
+func TestCounting_Sort(t *testing.T) {
+	type args struct {
+		arr []int
+	}
+	rand.Seed(time.Now().UnixNano())
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "cSort-1",
+			args: args{
+				arr: rand.Perm(10),
+			},
+		},
+		{
+			name: "cSort-2",
+			args: args{
+				arr: rand.Perm(10),
+			},
+		},
+		{
+			name: "cSort-3",
+			args: args{
+				arr: rand.Perm(10),
+			},
+		},
+		{
+			name: "cSort-4",
+			args: args{
+				arr: rand.Perm(10),
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			qs := &Counting{}
+			qs.Sort(tt.args.arr)
+			if !reflect.DeepEqual(tt.args.arr, []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}) {
+				t.Errorf("cannot sort: %v", tt.args.arr)
+			}
+		})
+	}
+}
+
 func makeRandIntArr(length int) []int {
 	var arr []int
 	for i := 0; i < length; i++ {
@@ -202,7 +247,7 @@ type testCase struct {
 }
 
 func BenchmarkSorter(b *testing.B) {
-	genArr := makeRandIntArr(1000000)
+	genArr := makeRandIntArr(100)
 
 	var testCases []testCase
 
@@ -241,6 +286,16 @@ func BenchmarkSorter(b *testing.B) {
 	sortAlgo.name = "bubbleSort"
 	sortAlgo.job = func(b *testing.B) {
 		bs := &Bubble{}
+		raw := genArr
+		for i := 0; i < b.N; i++ {
+			bs.Sort(raw)
+		}
+	}
+	testCases = append(testCases, *sortAlgo)
+
+	sortAlgo.name = "countingSort"
+	sortAlgo.job = func(b *testing.B) {
+		bs := &Counting{}
 		raw := genArr
 		for i := 0; i < b.N; i++ {
 			bs.Sort(raw)
