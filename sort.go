@@ -104,3 +104,58 @@ func (cs *Counting) Sort(arr []int) {
 		}
 	}
 }
+
+type Merge struct {
+}
+
+//todo: change me
+func (ms *Merge) Sort(arr []int) []int {
+	var num = len(arr)
+
+	if num == 1 {
+		return arr
+	}
+
+	middle := num / 2
+	var (
+		left  = make([]int, middle)
+		right = make([]int, num-middle)
+	)
+	for i := 0; i < num; i++ {
+		if i < middle {
+			left[i] = arr[i]
+		} else {
+			right[i-middle] = arr[i]
+		}
+	}
+
+	return merge(ms.Sort(left), ms.Sort(right))
+}
+
+func merge(left, right []int) (merged []int) {
+
+	merged = make([]int, len(left)+len(right))
+
+	i := 0
+	for len(left) > 0 && len(right) > 0 {
+		if left[0] < right[0] {
+			merged[i] = left[0]
+			left = left[1:]
+		} else {
+			merged[i] = right[0]
+			right = right[1:]
+		}
+		i++
+	}
+
+	for j := 0; j < len(left); j++ {
+		merged[i] = left[j]
+		i++
+	}
+	for j := 0; j < len(right); j++ {
+		merged[i] = right[j]
+		i++
+	}
+
+	return
+}
